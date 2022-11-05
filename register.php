@@ -9,6 +9,7 @@ $address = NULL;
 $contact = null;
 $email = null;
 $password=null;
+$user_type = null;
 $error_msg = null;
 $success_message= null;
 
@@ -68,12 +69,15 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 
     }
 
+    $user_type = trim($_POST['userType']);
+
     if (empty($error_msg)) {
-        $register_user = $db_action->registerUser($fullname, $address, $email, $contact, $password);
+        $register_user = $db_action->registerUser($fullname, $address, $email, $contact, $password, $user_type);
         if ($register_user) {
             $success_message = "Registration has been successfully done";
-            header("Location:home.php"); // redirecting to landing page after successful registration.
             $_SESSION['login'] = true; // setting the login session value after successful registration.
+            $_SESSION['login-type'] = $_POST['user_type'];
+            header("Location:home.php"); // redirecting to landing page after successful registration.
         } else {
             $error_msg = "Registration failed. Please try again";
         }
@@ -143,6 +147,16 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+
+                <div class="form-group">
+                    <label for="userType">User Type</label>
+<!--                    <input type="text" class="form-control" id="userType" name="userType" placeholder="Password">-->
+                    <select class="form-select" name="userType" aria-label="Default select example">
+                        <option selected>Open this select menu</option>
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit</button>

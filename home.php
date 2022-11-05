@@ -4,10 +4,17 @@ include_once 'db_functions.php';
 $queryFunction = new dbCrudFunctions();
 session_start();
 
-$cart_item_count = 0;
-if(isset($_SESSION["shopping_cart"])) {
-    $cart_item_count = count($_SESSION["shopping_cart"]);
+//print_r($_SESSION['login-type']);
+//print_r($_SESSION['login']);
+
+// destroying session variable to logout.
+if(isset($_GET['logout'])){
+    session_destroy();
+    header("Location:login.php");
 }
+
+$cart_item_count = 0;
+
 // if Add to cart button is pressed
 if(isset($_POST["add_to_cart"])){
     // if there is already product present in the shopping cart
@@ -40,7 +47,12 @@ if(isset($_POST["add_to_cart"])){
             'product_description' =>  $_POST["hidden_description"]
         );
         $_SESSION["shopping_cart"][0] = $product_array;
+
     }
+}
+
+if(isset($_SESSION["shopping_cart"])) {
+    $cart_item_count = count($_SESSION["shopping_cart"]);
 }
 
 ?>
@@ -84,21 +96,31 @@ if(isset($_POST["add_to_cart"])){
         <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="/products.html">products</a>
+                    <a class="nav-link" href="products.php">products</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Login</a>
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="home.php?logout=true">Log-out</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">Register</a>
                 </li>
+
+
                 <li class="nav-item">
                     <a class="nav-link" href="carts.php">
                         <i class="bi bi-cart" style="font-size:24px"></i>
                         <span class='badge badge-warning' id='lblCartCount'> <?php echo $cart_item_count ?>  </span>
                         Cart
                     </a>
+                </li>
+
+
+                <li class="pl-1 nav-item">
+                    <a class="nav-link" href="admin.php">Admin Panel</a>
                 </li>
             </ul>
         </div>

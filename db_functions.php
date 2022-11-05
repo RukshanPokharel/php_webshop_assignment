@@ -33,11 +33,26 @@ class dbCrudFunctions
         return $result;
     }
 
-    function registerUser($fullname, $address, $email, $contact, $password){
-        $result = mysqli_query($this->dbConnection, "INSERT INTO users(fullname, address, contact_no, email, password)
-                                values('".$fullname."','".$address."','".$contact."','".$email."','".$password."')") or die(mysqli_error());
+    function registerUser($fullname, $address, $email, $contact, $password, $userType){
+        $result = mysqli_query($this->dbConnection, "INSERT INTO users(fullname, address, contact_no, email, password, user_type)
+                                values('".$fullname."','".$address."','".$contact."','".$email."','".$password."','".$userType."')") or die(mysqli_error());
 
         return $result;
+    }
+
+    function LoginUser($email, $password){
+        $result = mysqli_query($this->dbConnection,
+            "SELECT * FROM users WHERE email = '".$email."' AND password = '".$password."'"
+        )
+        or die(mysqli_error($this->dbConnection));
+
+        //Initialize the storage array
+        $results = array();
+        //loop through the results
+        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){ //MYSQLI_NUM returns the array index which is number whereas MYSQLI_ASSOC returns the associative array index which is column_name of database.
+            array_push($results, $row);
+        }
+        return $results;
     }
 
     function addProduct($product_name, $price, $image, $description){

@@ -3,12 +3,15 @@
 session_start();
 require_once 'db_functions.php';
 $db_action = new dbCrudFunctions();
-//if (!isset($_SESSION['login'])){
-//    header("Location:home.php");
-//}
-//else if($_SESSION['type'] == "user" ){
-//    header("Location:not_authorized.php");
-//}
+if (!isset($_SESSION['login'])){
+    header("Location:login.php");
+}
+else if($_SESSION['login-type'] == "user" ){
+    header("Location:not_authorized.php");
+}
+
+//print_r($_SESSION['login-type']);
+//print_r($_SESSION['login']);
 
 $error_msg = '';
 $success_message = '';
@@ -70,6 +73,39 @@ if (isset($_POST['formUpdate'])){
 
 </head>
 <body>
+
+<!-- navbar starts-->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container-xxl">
+        <a href="/" class="navbar-brand">
+            <img src="images/what.jpg" alt="" width="50" height="40" class="d-inline-block align-text-top">
+            <span class="fw-bold text-secondary">
+               Classic Store
+            </span>
+        </a>
+        <!-- toggle button for mobile version navigation -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="toggle navigation">
+            <span class="navbar-toggler-icon">
+            </span>
+        </button>
+
+        <!-- navbar links -->
+        <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="home.php?logout=true">Log-out</a>
+                </li>
+
+                <li class="pl-1 nav-item">
+                    <a class="nav-link" href="home.php">Home Page</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--- navbar ends --->
+
 
 <div class="container-lg">
     <div class="row justify-content-center align-center">
