@@ -21,11 +21,11 @@ $success_message_update = '';
 
 // get all form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty($_POST["productName"]) || empty($_POST["price"]) || empty($_POST["image"])){
-        $error_msg = 'Product Name, Price and Image path is mandatory';
+    if (empty($_POST["productName"]) || empty($_POST["price"]) || empty($_POST["image"]) || empty($_POST["category"])){
+        $error_msg = 'Product Name, Price and Image path and Category is mandatory';
     }
     else {
-            $add_product = $db_action->addProduct($_POST["productName"], $_POST["price"], $_POST["image"], $_POST["description"]);
+            $add_product = $db_action->addProduct($_POST["productName"], $_POST["price"], $_POST["image"], $_POST["description"] , $_POST["category"]);
             if ($add_product) {
                 $success_message = "Successfully added products";
             } else {
@@ -39,11 +39,11 @@ if (isset($_GET['delete'])){
 }
 
 if (isset($_POST['formUpdate'])){
-    if (empty($_POST["productNameUpdate"]) || empty($_POST["priceUpdate"]) || empty($_POST["imageUpdate"]) || empty($_POST["descriptionUpdate"])){
+    if (empty($_POST["productNameUpdate"]) || empty($_POST["priceUpdate"]) || empty($_POST["imageUpdate"]) || empty($_POST["descriptionUpdate"]) || empty($_POST["categoryUpdate"])){
         $error_msg_update = 'Product Name, Price and Description is mandatory';
     }
     else {
-        $update_product = $db_action->updateProduct( $_POST["pid"],  $_POST["productNameUpdate"], $_POST["priceUpdate"], $_POST["imageUpdate"], $_POST["descriptionUpdate"]);
+        $update_product = $db_action->updateProduct( $_POST["pid"],  $_POST["productNameUpdate"], $_POST["priceUpdate"], $_POST["imageUpdate"], $_POST["descriptionUpdate"], $_POST["categoryUpdate"]);
         if ($update_product) {
             $success_message_update = "Successfully updated products";
             header("Location:admin.php");
@@ -53,6 +53,8 @@ if (isset($_POST['formUpdate'])){
     }
 }
 
+// fetch all subcategories
+$subcategories = $db_action->getAllSubCategories();
 
 ?>
 
@@ -143,6 +145,19 @@ if (isset($_POST['formUpdate'])){
                 <input type="text" class="form-control" name="productNameUpdate" placeholder="Product Name" id="productName" value="<?php echo $item['product_name']; ?>">
             </div>
             <div class="form-group mb-4">
+                <label for="category">Category</label>
+                <!--                    <input type="text" class="form-control" id="userType" name="userType" placeholder="Password">-->
+                <select class="form-select" name="categoryUpdate" aria-label="Default select example">
+                    <option selected>Choose Category</option>
+                    <?php foreach ($subcategories as $subcategory) {
+                    ?>
+                    <option value="<?php echo $subcategory['sub_category_id']; ?>"><?php echo $subcategory['sub_category_name'] ?></option>
+
+                    <?php } ?>
+
+                </select>
+            </div>
+            <div class="form-group mb-4">
                 <label for="description">Description</label>
                 <input type="text" class="form-control" id="description" name="descriptionUpdate" placeholder="Description" value="<?php echo $item['description']; ?>">
             </div>
@@ -167,6 +182,19 @@ if (isset($_POST['formUpdate'])){
                 <div class="form-group mb-4">
                     <label for="productName" class="form-label">Product Name</label>
                     <input type="text" class="form-control" name="productName" placeholder="Product Name" id="productName">
+                </div>
+                <div class="form-group mb-4">
+                    <label for="category">Category</label>
+                    <!--                    <input type="text" class="form-control" id="userType" name="userType" placeholder="Password">-->
+                    <select class="form-select" name="category" aria-label="Default select example">
+                        <option selected>Choose Category</option>
+                        <?php foreach ($subcategories as $subcategory) {
+                            ?>
+                            <option value="<?php echo $subcategory['sub_category_id']; ?>"><?php echo $subcategory['sub_category_name'] ?></option>
+
+                        <?php } ?>
+
+                    </select>
                 </div>
                 <div class="form-group mb-4">
                     <label for="description">Description</label>
@@ -209,9 +237,11 @@ if (isset($_POST['formUpdate'])){
             <tbody>
             <?php
             $queryResult = $db_action->getAllProducts();
+
             foreach($queryResult as $product)
             {
-            ?>
+
+                ?>
             <tr>
                 <th scope="row"><?php echo $product["product_id"]; ?></th>
                 <td><?php echo $product["product_name"]; ?></td>
