@@ -34,6 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($login_user) {
             foreach ($login_user as $user){
                 $_SESSION['login-type'] = $user['user_type'];
+                $_SESSION['user-name'] = $user['fullname'];
+
             }
             $success_message_login = "Login has been successful";
             $_SESSION['login'] = true; // setting the login session value after successful login.

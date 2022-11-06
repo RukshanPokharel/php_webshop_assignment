@@ -17,6 +17,12 @@ $cart_item_count = 0;
 
 // if Add to cart button is pressed
 if(isset($_POST["add_to_cart"])){
+
+    // check if the user is logged in before adding items to the cart
+    if (!isset($_SESSION['login'])){
+        header("Location:login.php");
+    }
+
     // if there is already product present in the shopping cart
     if(isset($_SESSION["shopping_cart"])) {
         $product_array_id = array_column($_SESSION["shopping_cart"], "product_id");
@@ -163,7 +169,11 @@ else{
 
 
                 <li class="pl-1 nav-item">
-                    <a class="nav-link" href="admin.php">Admin Panel</a>
+                    <a class="nav-link" style="margin-left: 50px;" href="admin.php">Admin Panel</a>
+                </li>
+
+                <li class="pl-1 nav-item">
+                    <a class="nav-link badge bg-secondary text-wrap font-monospace" style="width: 6rem; font-size: 15px; margin-left: 50px;" href="admin.php">Hi <?php if (isset($_SESSION['login'])) echo $_SESSION['user-name'];?></a>
                 </li>
             </ul>
         </div>
