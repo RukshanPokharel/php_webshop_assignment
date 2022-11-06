@@ -97,6 +97,7 @@ class dbCrudFunctions
         return $result;
     }
 
+
     function deleteProduct($product_id){
         $result = mysqli_query($this->dbConnection, "DELETE from products where product_id = '$product_id'");
 

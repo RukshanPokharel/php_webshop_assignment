@@ -79,7 +79,7 @@ $subcategories = $db_action->getAllSubCategories();
 <!-- navbar starts-->
 <nav class="navbar navbar-expand-md navbar-light bg-light">
     <div class="container-xxl">
-        <a href="/" class="navbar-brand">
+        <a href="admin.php" class="navbar-brand">
             <img src="images/what.jpg" alt="" width="50" height="40" class="d-inline-block align-text-top">
             <span class="fw-bold text-secondary">
                Classic Store
